@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AppwriteMigrator": {
+      "commandName": "Project",
+      "commandLineArgs": "sync -e http://localhost/v1 -i 663c14ed0022d762226b -k 0b4506e24f090a69299e3494ce7dec590ee155f492859faf3916582c584780f4ebd093ec0886af9a666c1ca4d4bb6cc835bb57e89cea9d63334e4c0c095c3745f4d16780a50d5654a6b71a5ec36ac6d27bc0939a61760b67ea19260fd9d533b5c02487885a05338975fa8b24249e8204e5e654b04e2158da60dd0f2cf7df2afb"
+    }
+  }
+}

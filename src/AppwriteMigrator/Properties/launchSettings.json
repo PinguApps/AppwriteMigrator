@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "AppwriteMigrator": {
+    "Debug Sync": {
       "commandName": "Project",
       "commandLineArgs": "sync -e http://localhost/v1 -i 663c14ed0022d762226b -k 0b4506e24f090a69299e3494ce7dec590ee155f492859faf3916582c584780f4ebd093ec0886af9a666c1ca4d4bb6cc835bb57e89cea9d63334e4c0c095c3745f4d16780a50d5654a6b71a5ec36ac6d27bc0939a61760b67ea19260fd9d533b5c02487885a05338975fa8b24249e8204e5e654b04e2158da60dd0f2cf7df2afb"
+    },
+    "Debug Migrate": {
+      "commandName": "Project",
+      "commandLineArgs": "migrate -e http://localhost/v1 -i 6635627e0002688d2add -k 251d223e85d49b7dea1897147ed81f50d498a8433e5eb2e5d6531093e25d78bf8cceec0d2c063fe83ec5245a11f3d91430d62f7dd5fae528165d9c7e73a93dd90cba1c8ed61b98b09d4512fc4d8d56f1753d7b9ed82a36ff3998375f75aadba0cc9f35c543f9082f1c695fc964609b83eea4da30f6bb9dd6739cbcb0131739a1"
     }
   }
 }

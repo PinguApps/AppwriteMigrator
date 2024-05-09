@@ -8,7 +8,7 @@ public class JObjectConverter : JsonConverter<JObject>
     public override JObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Use Newtonsoft.Json to parse the JSON into a JObject
-        JObject jObject = JObject.Parse(reader.GetString());
+        JObject jObject = JObject.Parse(reader.GetString()!);
         return jObject;
     }
 

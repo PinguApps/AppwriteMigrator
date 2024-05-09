@@ -54,6 +54,12 @@ public class AppwriteCommands
 
         var json = JsonSerializer.Serialize(schema, _jsonSerializerOptions);
 
+        var ggg = JsonSerializer.Deserialize<List<DatabaseExtended>>(json, _jsonSerializerOptions);
+
+        var hhh = ggg[0].Collections[0].ConvertedAttributes;
+
+        await File.WriteAllTextAsync(fileName, json);
+
         Console.WriteLine("# Sync Complete!");
     }
 

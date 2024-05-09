@@ -35,7 +35,7 @@ public class AppwriteCommands
         {
             var collections = await dbClient.ListCollections(database.Id);
 
-            Console.WriteLine($"Database '{database.Name}' contains '{collections.Collections.Count}' collections...");
+            Console.WriteLine($"Database '{database.Name}' contains {collections.Collections.Count} collections...");
 
             var extended = new DatabaseExtended(database, collections.Collections);
 

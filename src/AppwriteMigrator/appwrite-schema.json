@@ -132,6 +132,48 @@
             ],
             "format": "enum",
             "default": "A"
+          },
+          {
+            "key": "authors",
+            "type": "relationship",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "relatedCollection": "663d30040004985b3092",
+            "relationType": "oneToOne",
+            "twoWay": false,
+            "twoWayKey": "books",
+            "onDelete": "setNull",
+            "side": "parent"
+          },
+          {
+            "key": "authors2",
+            "type": "relationship",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "relatedCollection": "663d30040004985b3092",
+            "relationType": "oneToMany",
+            "twoWay": false,
+            "twoWayKey": "663c198f0016e67cc571",
+            "onDelete": "cascade",
+            "side": "parent"
+          },
+          {
+            "key": "authors0",
+            "type": "relationship",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "relatedCollection": "663d30040004985b3092",
+            "relationType": "manyToMany",
+            "twoWay": true,
+            "twoWayKey": "books0",
+            "onDelete": "restrict",
+            "side": "parent"
           }
         ],
         "Indexes": [
@@ -174,6 +216,43 @@
             ]
           }
         ]
+      },
+      {
+        "Id": "663d30040004985b3092",
+        "CreatedAt": "09/05/2024 21:20:20",
+        "UpdatedAt": "09/05/2024 21:20:20",
+        "Permissions": [],
+        "DatabaseId": "663c198200252ad35aa5",
+        "Name": "Authors",
+        "Enabled": true,
+        "DocumentSecurity": false,
+        "Attributes": [
+          {
+            "key": "Name",
+            "type": "string",
+            "status": "available",
+            "error": "",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          },
+          {
+            "key": "books0",
+            "type": "relationship",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "relatedCollection": "663c198f0016e67cc571",
+            "relationType": "manyToMany",
+            "twoWay": true,
+            "twoWayKey": "authors0",
+            "onDelete": "restrict",
+            "side": "child"
+          }
+        ],
+        "Indexes": []
       }
     ],
     "Id": "663c198200252ad35aa5",

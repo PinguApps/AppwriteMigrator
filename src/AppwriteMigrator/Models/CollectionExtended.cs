@@ -17,6 +17,7 @@ public class CollectionExtended : Collection
 
     }
 
+    [JsonIgnore]
     public List<Attribute> ConvertedAttributes => Attributes.
         Select(x =>
         {

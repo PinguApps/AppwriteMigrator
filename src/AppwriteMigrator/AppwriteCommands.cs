@@ -1,14 +1,24 @@
 ﻿using Appwrite;
 using Appwrite.Services;
+using AppwriteMigrator.Converters;
 using AppwriteMigrator.Models;
 using Cocona;
+using System.Text.Json;
 
 namespace AppwriteMigrator;
 public class AppwriteCommands
 {
-    // Add filename for json output. Default to something sensible.
+    // Need to properly convert attributes...
 
+    readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        WriteIndented = true
+    };
 
+    public AppwriteCommands()
+    {
+        _jsonSerializerOptions.Converters.Add(new JObjectConverter());
+    }
 
     [Command(Description = "Syncs the settings from your provided project to a local json file.")]
     public async Task Sync([Option('e', Description = "The API endpoint")] string endpoint,
@@ -37,10 +47,12 @@ public class AppwriteCommands
 
             Console.WriteLine($"Database '{database.Name}' contains {collections.Collections.Count} collections...");
 
-            var extended = new DatabaseExtended(database, collections.Collections);
+            var extendedDatabase = new DatabaseExtended(database, collections.Collections);
 
-            schema.Add(extended);
+            schema.Add(extendedDatabase);
         }
+
+        var json = JsonSerializer.Serialize(schema, _jsonSerializerOptions);
 
         Console.WriteLine("# Sync Complete!");
     }

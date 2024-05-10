@@ -65,6 +65,80 @@ public class AppwriteCommands
         [Option("key", ['k'], Description = "The API Key for the project")] string apiKey,
         [Option('f', Description = "The filename to store the schema within")] string fileName = "appwrite-schema.json")
     {
+        Console.WriteLine("# Begin Migration...");
 
+        var client = new Client()
+            .SetEndpoint(endpoint)
+            .SetProject(projectId)
+            .SetKey(apiKey);
+
+        var dbClient = new Databases(client);
+
+        var json = await File.ReadAllTextAsync(fileName);
+
+        var newSchema = JsonSerializer.Deserialize<List<DatabaseExtended>>(json, _jsonSerializerOptions);
+
+        if (newSchema is null)
+            throw new CommandExitedException("provided file did not deserialize", 1);
+
+        Console.WriteLine($"Found {newSchema.Count} database(s) in new schema...");
+
+        var databases = await dbClient.List();
+
+        Console.WriteLine($"Found {databases.Databases.Count} database(s) in target...");
+
+        List<DatabaseExtended> oldSchema = [];
+
+        foreach (var database in databases.Databases)
+        {
+            var collections = await dbClient.ListCollections(database.Id);
+
+            Console.WriteLine($"Found {collections.Collections.Count} existing collection(s) within database {database.Name}");
+
+            var extendedDatabase = new DatabaseExtended(database, collections.Collections);
+
+            oldSchema.Add(extendedDatabase);
+        }
+
+        Console.WriteLine("Comparing Databases...");
+
+        foreach (var database in newSchema)
+        {
+            var oldDatabase = oldSchema.FirstOrDefault(x => x.Id == database.Id);
+
+            if (oldDatabase is null)
+            {
+                Console.WriteLine($"Creating Database {database.Name}...");
+
+                var result = await dbClient.Create(database.Id, database.Name, database.Enabled);
+
+                oldSchema.Add(new DatabaseExtended(result));
+            }
+            else
+            {
+                if (oldDatabase.Name != database.Name || oldDatabase.Enabled != database.Enabled)
+                {
+                    Console.WriteLine($"Updating Database {database.Name}...");
+
+                    var result = await dbClient.Update(database.Id, database.Name, database.Enabled);
+                }
+            }
+        }
+
+        foreach (var oldDatabase in oldSchema)
+        {
+            var database = newSchema.FirstOrDefault(x => x.Id == oldDatabase.Id);
+
+            if (database is null)
+            {
+                Console.WriteLine($"Deleting Database {oldDatabase.Name}...");
+
+                var result = await dbClient.Delete(oldDatabase.Id);
+            }
+        }
+
+
+
+        Console.WriteLine("# Migration Complete!");
     }
 }

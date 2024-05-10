@@ -110,7 +110,7 @@ public class CollectionExtended : Collection
 
         return (jObject["type"]?.ToString()) switch
         {
-            "integer" => token.ToObject<int?>(),
+            "integer" => token.ToObject<long?>(),
             "double" => token.ToObject<double?>(),
             "boolean" => token.ToObject<bool?>(),
             "datetime" => token.ToObject<string?>(),
@@ -130,7 +130,7 @@ public class CollectionExtended : Collection
 
         return type switch
         {
-            "integer" => propertyElement.TryGetInt32(out int val) ? val : null,
+            "integer" => propertyElement.TryGetInt64(out long val) ? val : null,
             "double" => propertyElement.TryGetDouble(out double val) ? val : null,
             "boolean" => propertyElement.GetBoolean(),
             "datetime" => propertyElement.GetString(),

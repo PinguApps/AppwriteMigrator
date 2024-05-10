@@ -1,4 +1,8 @@
-﻿namespace AppwriteMigrator.Models;
+﻿using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace AppwriteMigrator.Models;
 public record Attribute
 {
     public string Key { get; set; } = default!;
@@ -13,7 +17,7 @@ public record Attribute
 
     public bool Array { get; set; }
 
-    public int? Size { get; set; }
+    public long? Size { get; set; }
 
     public object? Default { get; set; }
 
@@ -36,4 +40,24 @@ public record Attribute
     public string? OnDelete { get; set; }
 
     public string? Side { get; set; }
+
+    public bool? Encrypt { get; set; }
+
+    [JsonIgnore]
+    public List<string>? ConvertedElements => Elements?
+        .Select(x =>
+        {
+            switch (x)
+            {
+                case JObject jObject:
+                    return jObject.ToString();
+                case JsonElement jsonElement:
+                    return jsonElement.GetString()!;
+                case string str:
+                    return str;
+                default:
+                    throw new InvalidOperationException("Unsupported element");
+            }
+        })
+        .ToList();
 }

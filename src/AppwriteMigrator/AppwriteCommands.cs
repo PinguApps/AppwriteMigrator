@@ -2,6 +2,7 @@
 using Appwrite.Services;
 using AppwriteMigrator.Converters;
 using AppwriteMigrator.Models;
+using AppwriteMigrator.Utils;
 using Cocona;
 using System.Text.Json;
 
@@ -102,6 +103,7 @@ public class AppwriteCommands
 
         Console.WriteLine("Comparing Databases...");
 
+        // Update DB's
         foreach (var database in newSchema)
         {
             var oldDatabase = oldSchema.FirstOrDefault(x => x.Id == database.Id);
@@ -137,7 +139,48 @@ public class AppwriteCommands
             }
         }
 
+        // Update Collections
+        foreach (var database in newSchema)
+        {
+            var oldDatabase = oldSchema.First(x => x.Id == database.Id);
 
+            foreach (var collection in database.Collections)
+            {
+                var oldCollection = oldDatabase.Collections.FirstOrDefault(x => x.Id == collection.Id);
+
+                if (oldCollection is null)
+                {
+                    Console.WriteLine($"Creating Collection {collection.Name}...");
+
+                    var result = await dbClient.CreateCollection(collection.DatabaseId, collection.Id, collection.Name, collection.ConvertedPermissions, collection.DocumentSecurity, collection.Enabled);
+
+                    oldDatabase.Collections.Add(new CollectionExtended(result));
+                }
+                else
+                {
+                    if (oldCollection.Name != collection.Name || oldCollection.Enabled != collection.Enabled ||
+                        oldCollection.DocumentSecurity != collection.DocumentSecurity ||
+                        ListUtils.AreStringListsDifferent(oldCollection.ConvertedPermissions, collection.ConvertedPermissions))
+                    {
+                        Console.WriteLine($"Updating Collection {collection.Name}...");
+
+                        var result = await dbClient.UpdateCollection(collection.DatabaseId, collection.Id, collection.Name, collection.ConvertedPermissions, collection.DocumentSecurity, collection.Enabled);
+                    }
+                }
+            }
+
+            foreach (var oldCollection in oldDatabase.Collections)
+            {
+                var collection = database.Collections.FirstOrDefault(x => x.Id == oldCollection.Id);
+
+                if (collection is null)
+                {
+                    Console.WriteLine($"Deleting Collection {oldCollection.Name}...");
+
+                    var result = await dbClient.DeleteCollection(oldCollection.DatabaseId, oldCollection.Id);
+                }
+            }
+        }
 
         Console.WriteLine("# Migration Complete!");
     }

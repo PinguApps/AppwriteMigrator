@@ -33,6 +33,24 @@ public class CollectionExtended : Collection
         })
         .ToList();
 
+    [JsonIgnore]
+    public List<string> ConvertedPermissions => Permissions
+        .Select(x =>
+        {
+            switch (x)
+            {
+                case JObject jObject:
+                    return jObject.ToString();
+                case JsonElement jsonElement:
+                    return jsonElement.GetString()!;
+                case string str:
+                    return str;
+                default:
+                    throw new InvalidOperationException("Unsupported permission type");
+            }
+        })
+        .ToList();
+
     private Attribute ConvertJObjectToAttribute(JObject jObject)
     {
         return new Attribute

@@ -27,7 +27,7 @@ public record Attribute
 
     public string? Format { get; set; }
 
-    public List<object>? Elements { get; set; }
+    public ElementList? Elements { get; set; }
 
     public string? RelatedCollection { get; set; }
 
@@ -60,4 +60,26 @@ public record Attribute
             }
         })
         .ToList();
+}
+
+public class ElementList : List<object>
+{
+    public ElementList() : base()
+    {
+
+    }
+
+    public ElementList(IEnumerable<object> items) : base(items)
+    {
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ElementList other && this.SequenceEqual(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return this.Aggregate(17, (acc, val) => acc * 23 + (val?.GetHashCode() ?? 0));
+    }
 }

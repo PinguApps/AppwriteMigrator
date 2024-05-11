@@ -67,7 +67,7 @@ public class CollectionExtended : Collection
             Min = GetTypedValue(jObject, "min"),
             Max = GetTypedValue(jObject, "max"),
             Format = jObject["format"]?.ToString(),
-            Elements = jObject["elements"]?.ToObject<List<object>>(),
+            Elements = jObject["elements"]?.ToObject<ElementList?>(),
             RelatedCollection = jObject["relatedCollection"]?.ToString(),
             RelationType = jObject["relationType"]?.ToString(),
             TwoWay = jObject["twoWay"]?.ToObject<bool?>(),
@@ -141,14 +141,14 @@ public class CollectionExtended : Collection
         };
     }
 
-    private List<object>? GetJsonArrayToTypedList(JsonElement jsonElement, string propertyName)
+    private ElementList? GetJsonArrayToTypedList(JsonElement jsonElement, string propertyName)
     {
         if (!jsonElement.TryGetProperty(propertyName, out JsonElement propertyElement))
             return null;
 
         var type = jsonElement.GetProperty("type").GetString();
 
-        var list = new List<object>();
+        var list = new ElementList();
 
         foreach (var element in propertyElement.EnumerateArray())
         {

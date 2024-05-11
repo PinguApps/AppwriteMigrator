@@ -103,7 +103,6 @@ public class AppwriteCommands
         }
 
         Console.WriteLine("Comparing Databases...");
-
         // Update DB's
         foreach (var database in newSchema)
         {
@@ -140,6 +139,7 @@ public class AppwriteCommands
             }
         }
 
+        Console.WriteLine("Comparing Collections...");
         // Update Collections
         foreach (var database in newSchema)
         {
@@ -183,6 +183,7 @@ public class AppwriteCommands
             }
         }
 
+        Console.WriteLine("Comparing Attributes...");
         // Update Attributes
         foreach (var database in newSchema)
         {
@@ -227,11 +228,9 @@ public class AppwriteCommands
             }
         }
 
+        Console.WriteLine("Rebuilding current schema...");
         // Rebuild oldSchema before working on indexes
-
         oldSchema = [];
-
-        Console.WriteLine("Rebuilding current schema prior to migrating indexes...");
 
         foreach (var database in databases.Databases)
         {
@@ -244,7 +243,9 @@ public class AppwriteCommands
             oldSchema.Add(extendedDatabase);
         }
 
+        Console.WriteLine("Comparing Indexes...");
         // Update Indexes
+
 
         Console.WriteLine("# Migration Complete!");
     }

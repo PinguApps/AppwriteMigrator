@@ -95,7 +95,7 @@ public class AppwriteCommands
         {
             var collections = await dbClient.ListCollections(database.Id);
 
-            Console.WriteLine($"Found {collections.Collections.Count} existing collection(s) within database {database.Name}");
+            Console.WriteLine($"Found {collections.Collections.Count} existing collection(s) within database {database.Name}...");
 
             var extendedDatabase = new DatabaseExtended(database, collections.Collections);
 
@@ -228,6 +228,21 @@ public class AppwriteCommands
         }
 
         // Rebuild oldSchema before working on indexes
+
+        oldSchema = [];
+
+        Console.WriteLine("Rebuilding current schema prior to migrating indexes...");
+
+        foreach (var database in databases.Databases)
+        {
+            var collections = await dbClient.ListCollections(database.Id);
+
+            Console.WriteLine($"Found {collections.Collections.Count} existing collection(s) within database {database.Name}...");
+
+            var extendedDatabase = new DatabaseExtended(database, collections.Collections);
+
+            oldSchema.Add(extendedDatabase);
+        }
 
         // Update Indexes
 

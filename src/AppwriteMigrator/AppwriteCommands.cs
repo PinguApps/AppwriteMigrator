@@ -232,6 +232,10 @@ public class AppwriteCommands
         // Rebuild oldSchema before working on indexes
         oldSchema = [];
 
+        databases = await dbClient.List();
+
+        Console.WriteLine($"Found {databases.Databases.Count} database(s) in target...");
+
         foreach (var database in databases.Databases)
         {
             var collections = await dbClient.ListCollections(database.Id);
@@ -245,7 +249,66 @@ public class AppwriteCommands
 
         Console.WriteLine("Comparing Indexes...");
         // Update Indexes
+        foreach (var database in newSchema)
+        {
+            var oldDatabase = oldSchema.First(x => x.Id == database.Id);
 
+            foreach (var collection in database.Collections)
+            {
+                var oldCollection = oldDatabase.Collections.First(x => x.Id == collection.Id);
+
+                foreach (var index in collection.Indexes)
+                {
+                    var oldIndex = oldCollection.Indexes.FirstOrDefault(x => x.Key == index.Key);
+
+                    if (oldIndex is null)
+                    {
+                        Console.WriteLine($"Creating Index {index.Key}...");
+
+                        var result = await dbClient.CreateIndex(collection.DatabaseId, collection.Id, index.Key,
+                            new IndexType(index.Type), ListUtils.ConvertObjectListToStringList(index.Attributes),
+                            ListUtils.ConvertNullableObjectListToStringList(index.Orders));
+
+                        oldCollection.Indexes.Add(result);
+                    }
+                    else
+                    {
+                        if (oldIndex.Type != index.Type ||
+                            !ListUtils.ConvertObjectListToStringList(oldIndex.Attributes).SequenceEqual(ListUtils.ConvertObjectListToStringList(index.Attributes)) ||
+                            (oldIndex.Orders is not null && index.Orders is null) ||
+                            (oldIndex.Orders is null && index.Orders is not null) ||
+                            (oldIndex.Orders is not null && index.Orders is not null && !ListUtils.ConvertObjectListToStringList(oldIndex.Orders).SequenceEqual(ListUtils.ConvertObjectListToStringList(index.Orders))))
+                        {
+                            Console.WriteLine($"Updating Index {index.Key}...");
+
+                            await dbClient.DeleteIndex(collection.DatabaseId, collection.Id, oldIndex.Key);
+
+                            oldCollection.Indexes.Remove(oldIndex);
+
+                            var result = await dbClient.CreateIndex(collection.DatabaseId, collection.Id, index.Key,
+                                new IndexType(index.Type), ListUtils.ConvertObjectListToStringList(index.Attributes),
+                                ListUtils.ConvertNullableObjectListToStringList(index.Orders));
+
+                            oldCollection.Indexes.Add(result);
+                        }
+                    }
+                }
+
+                foreach (var oldIndex in oldCollection.Indexes)
+                {
+                    var index = collection.Indexes.FirstOrDefault(x => x.Key == oldIndex.Key);
+
+                    if (index is null)
+                    {
+                        Console.WriteLine($"Deleting Index {oldIndex.Key}...");
+
+                        oldCollection.Indexes.Remove(oldIndex);
+
+                        oldCollection.Indexes.Remove(oldIndex);
+                    }
+                }
+            }
+        }
 
         Console.WriteLine("# Migration Complete!");
     }

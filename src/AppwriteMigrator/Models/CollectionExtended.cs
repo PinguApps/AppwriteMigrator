@@ -1,4 +1,5 @@
 ﻿using Appwrite.Models;
+using AppwriteMigrator.Utils;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Text.Json;
@@ -35,22 +36,7 @@ public class CollectionExtended : Collection
         .ToList();
 
     [JsonIgnore]
-    public List<string> ConvertedPermissions => Permissions
-        .Select(x =>
-        {
-            switch (x)
-            {
-                case JObject jObject:
-                    return jObject.ToString();
-                case JsonElement jsonElement:
-                    return jsonElement.GetString()!;
-                case string str:
-                    return str;
-                default:
-                    throw new InvalidOperationException("Unsupported permission type");
-            }
-        })
-        .ToList();
+    public List<string> ConvertedPermissions => ListUtils.ConvertObjectListToStringList(Permissions);
 
     private Attribute ConvertJObjectToAttribute(JObject jObject)
     {

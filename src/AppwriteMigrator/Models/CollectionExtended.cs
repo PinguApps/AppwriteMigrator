@@ -1,5 +1,6 @@
 ﻿using Appwrite.Models;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -62,7 +63,7 @@ public class CollectionExtended : Collection
             Required = jObject["required"]!.ToObject<bool>(),
             Array = jObject["array"]!.ToObject<bool>(),
             Size = jObject["size"]?.ToObject<int?>(),
-            Default = jObject["default"]?.ToObject<object>(),
+            Default = GetTypedValue(jObject, "default"),
             Min = GetTypedValue(jObject, "min"),
             Max = GetTypedValue(jObject, "max"),
             Format = jObject["format"]?.ToString(),
@@ -108,12 +109,14 @@ public class CollectionExtended : Collection
         if (token == null)
             return null;
 
+        var ggg = token.Type;
+
         return (jObject["type"]?.ToString()) switch
         {
             "integer" => token.ToObject<long?>(),
             "double" => token.ToObject<double?>(),
             "boolean" => token.ToObject<bool?>(),
-            "datetime" => token.ToObject<string?>(),
+            "datetime" => token.Type == JTokenType.Date ? token.ToObject<DateTime>().ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture) : token.ToObject<string?>(),
             _ => token.ToObject<string?>()
         };
     }

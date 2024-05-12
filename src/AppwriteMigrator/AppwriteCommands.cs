@@ -10,8 +10,6 @@ using System.Text.Json;
 namespace AppwriteMigrator;
 public class AppwriteCommands
 {
-    // Need to properly convert attributes...
-
     readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
         WriteIndented = true

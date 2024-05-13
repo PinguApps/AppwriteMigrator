@@ -12,14 +12,27 @@
 	<IncludeBuildOutput>false</IncludeBuildOutput>
 
 	<PackageId>appwrite-migrator</PackageId>
+	<PackageTags>appwrite;migrate;migrator;tool;database;code first;pingu;PinguApps;Pingu Apps;cli;CSharp</PackageTags>
+	<PackageIcon>icon.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/PinguApps/AppwriteMigrator</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	<Version>0.1.0-alpha</Version>
-	<Authors>PinguApps</Authors>
+	<Authors>Pingu</Authors>
+	<Company>PinguApps</Company>
 	<Description>A CLI tool to help sync and migrate your DB schema with AppWrite.</Description>
+	<Copyright>Copyright 2024 (c) Matthew Parker. All rights reserved.</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Appwrite" Version="0.8.1" />
     <PackageReference Include="Cocona" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+	<None Include="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@
 	<IncludeBuildOutput>false</IncludeBuildOutput>
 
 	<PackageId>appwrite-migrator</PackageId>
-	<Version>0.1.0</Version>
+	<Version>0.1.0-alpha</Version>
 	<Authors>PinguApps</Authors>
 	<Description>A CLI tool to help sync and migrate your DB schema with AppWrite.</Description>
   </PropertyGroup>

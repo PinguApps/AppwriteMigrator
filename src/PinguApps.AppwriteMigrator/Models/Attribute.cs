@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AppwriteMigrator.Models;
+namespace PinguApps.AppwriteMigrator.Models;
 public record Attribute
 {
     public string Key { get; set; } = default!;

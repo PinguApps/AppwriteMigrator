@@ -1,5 +1,5 @@
-﻿using AppwriteMigrator;
-using Cocona;
+﻿using Cocona;
+using PinguApps.AppwriteMigrator;
 
 var builder = CoconaApp.CreateBuilder();
 

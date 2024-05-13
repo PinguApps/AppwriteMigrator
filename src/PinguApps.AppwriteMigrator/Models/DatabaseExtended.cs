@@ -1,7 +1,7 @@
 ﻿using Appwrite.Models;
 using System.Text.Json.Serialization;
 
-namespace AppwriteMigrator.Models;
+namespace PinguApps.AppwriteMigrator.Models;
 public class DatabaseExtended : Database
 {
     [JsonConstructor]

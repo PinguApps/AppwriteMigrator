@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AppwriteMigrator.Converters;
+namespace PinguApps.AppwriteMigrator.Converters;
 public class JObjectConverter : JsonConverter<JObject>
 {
     public override JObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

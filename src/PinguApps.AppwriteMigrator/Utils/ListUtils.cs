@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Text.Json;
 
-namespace AppwriteMigrator.Utils;
+namespace PinguApps.AppwriteMigrator.Utils;
 public static class ListUtils
 {
     public static bool AreStringListsDifferent(List<string> list1, List<string> list2)

@@ -1,11 +1,11 @@
 ﻿using Appwrite.Models;
-using AppwriteMigrator.Utils;
 using Newtonsoft.Json.Linq;
+using PinguApps.AppwriteMigrator.Utils;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AppwriteMigrator.Models;
+namespace PinguApps.AppwriteMigrator.Models;
 public class CollectionExtended : Collection
 {
     [JsonConstructor]

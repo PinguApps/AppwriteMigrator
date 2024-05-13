@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{71D166D2-2A31-4DA2-812E-A3CD57642818}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppwriteMigrator", "src\AppwriteMigrator\AppwriteMigrator.csproj", "{DE7C008B-396A-47AF-941D-091281D3AF9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PinguApps.AppwriteMigrator", "src\PinguApps.AppwriteMigrator\PinguApps.AppwriteMigrator.csproj", "{DE7C008B-396A-47AF-941D-091281D3AF9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿namespace AppwriteMigrator.Utils;
+﻿namespace PinguApps.AppwriteMigrator.Utils;
 public static class DateTimeUtils
 {
     public static string ConvertLocalTimeToOffset(string currentValue)

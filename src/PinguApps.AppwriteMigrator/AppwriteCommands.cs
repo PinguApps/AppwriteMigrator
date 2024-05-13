@@ -1,13 +1,13 @@
 ﻿using Appwrite;
 using Appwrite.Enums;
 using Appwrite.Services;
-using AppwriteMigrator.Converters;
-using AppwriteMigrator.Models;
-using AppwriteMigrator.Utils;
 using Cocona;
+using PinguApps.AppwriteMigrator.Converters;
+using PinguApps.AppwriteMigrator.Models;
+using PinguApps.AppwriteMigrator.Utils;
 using System.Text.Json;
 
-namespace AppwriteMigrator;
+namespace PinguApps.AppwriteMigrator;
 public class AppwriteCommands
 {
     readonly JsonSerializerOptions _jsonSerializerOptions = new()

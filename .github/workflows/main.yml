@@ -49,7 +49,7 @@ jobs:
         VERSION=$(echo "${PR_TITLE}" | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?')
         echo "Version: ${VERSION}"
         VERSION_WITHOUT_V=${VERSION#v}
-        echo "Version -v: ${VERSION_WITHOUGH_V}"
+        echo "Version -v: ${VERSION_WITHOUT_V}"
         echo "VERSION=${VERSION_WITHOUT_V}" >> $GITHUB_ENV
 
     - name: Create Nuget Package

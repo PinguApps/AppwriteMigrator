@@ -11,7 +11,7 @@
 	<PackageOutputPath>./nupkg</PackageOutputPath>
 	<IncludeBuildOutput>false</IncludeBuildOutput>
 
-	<PackageId>appwrite-migrator</PackageId>
+	<PackageId>PinguApps.AppwriteMigrator</PackageId>
 	<PackageTags>appwrite;migrate;migrator;tool;database;code first;pingu;PinguApps;Pingu Apps;cli;CSharp</PackageTags>
 	<PackageIcon>icon.png</PackageIcon>
 	<PackageReadmeFile>README.md</PackageReadmeFile>

@@ -21,6 +21,8 @@ jobs:
     needs: build
     name: Push Nuget
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
     steps:
     - name: Checkout
       uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
@@ -30,19 +32,27 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Get Release version
-      id: grv
+    - name: Get PR title
+      id: pr-title
       run: |
-        arrTag=(${GITHUB_REF//\// })
-        VERSION="${arrTag[2]}"
-        echo Version: $VERSION
-        VERSION="${VERSION:1}"
-        echo Clean Version: $VERSION
-        echo version=$VERSION >> ${GITHUB_OUTPUT}
+        if [ "${{ github.event_name }}" = "push" ]; then
+          PR_NUMBER=$(jq -r '.[0].pull_request.number' < "${GITHUB_EVENT_PATH}")
+        else
+          PR_NUMBER=$(gh pr list --base main --state merged --limit 1 --json number --jq '.[0].number')
+        fi
+        PR_TITLE=$(gh pr view $PR_NUMBER --json title --jq '.title')
+        echo "PR_TITLE=${PR_TITLE}" >> $GITHUB_ENV
+
+    - name: Extract version from PR title
+      id: extract-version
+      run: |
+        VERSION=$(echo "${PR_TITLE}" | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?')
+        VERSION_WITHOUT_V=${VERSION#v}
+        echo "VERSION=${VERSION_WITHOUT_V}" >> $GITHUB_ENV
 
     - name: Create Nuget Package
       run: |
-        dotnet pack -c Release --verbosity normal --include-symbols --include-source -p:PackageVersion=${{ steps.grv.outputs.version }} -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.csproj
+        dotnet pack -c Release --verbosity normal --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.csproj
 
     - name: Push to NuGet Feed
       run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --api-key $NUGET_KEY --skip-duplicate
@@ -51,7 +61,6 @@ jobs:
     name: Sync back to dev
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'push'
     permissions:
       contents: write
       pull-requests: write

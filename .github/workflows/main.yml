@@ -36,7 +36,7 @@ jobs:
       id: pr-title
       run: |
         if [ "${{ github.event_name }}" = "push" ]; then
-          PR_NUMBER=$(jq -r '.[0].pull_request.number' < "${GITHUB_EVENT_PATH}")
+          PR_NUMBER=$(jq -r '.number' < "${GITHUB_EVENT_PATH}")
         else
           PR_NUMBER=$(gh pr list --base main --state merged --limit 1 --json number --jq '.[0].number')
         fi

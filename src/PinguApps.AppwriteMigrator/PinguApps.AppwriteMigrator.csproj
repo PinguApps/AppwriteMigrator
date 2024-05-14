@@ -15,6 +15,7 @@
 	<PackageTags>appwrite;migrate;migrator;tool;database;code first;pingu;PinguApps;Pingu Apps;cli;CSharp</PackageTags>
 	<PackageIcon>icon.png</PackageIcon>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<RepositoryUrl>https://github.com/PinguApps/AppwriteMigrator</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>

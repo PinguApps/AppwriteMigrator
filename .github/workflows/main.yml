@@ -37,13 +37,8 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.PAT }}
       run: |
-        if [ "${{ github.event_name }}" = "push" ]; then
-          PR_NUMBER=$(jq -r '.number' < "${GITHUB_EVENT_PATH}")
-        else
-          PR_NUMBER=$(gh pr list --base main --state merged --limit 1 --json number --jq '.[0].number')
-        fi
+        PR_NUMBER=$(gh pr list --base main --state merged --limit 1 --json number --jq '.[0].number')
         echo "PR Number: ${PR_NUMBER}"
-        echo "GEP: ${GITHUB_EVENT_PATH}"
         PR_TITLE=$(gh pr view $PR_NUMBER --json title --jq '.title')
         echo "PR_TITLE=${PR_TITLE}" >> $GITHUB_ENV
 

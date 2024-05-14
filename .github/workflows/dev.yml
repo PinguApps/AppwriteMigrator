@@ -1,0 +1,55 @@
+name: Dev
+
+on:
+  push:
+    branches: [ dev ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Test
+    uses: ./.github/workflows/_build.yml
+    secrets: inherit
+
+  release:
+    name: Push to main
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'release'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+      with:
+        ref: dev
+
+    - name: Get Release Version
+      id: grv
+      run: |
+        arrTag=(${GITHUB_REF//\// })
+        VERSION="${arrTag[2]}"
+        echo Version: $VERSION
+        VERSION="${VERSION:1}"
+        echo Clean Version: $VERSION
+        echo "version=$VERSION" >> ${GITHUB_OUTPUT}
+
+    - name: Create Pull Request
+      id: cpr
+      env:
+        GH_TOKEN: ${{ secrets.PAT }}
+      run: |
+        git fetch origin main
+        pr_number=$(gh pr create --base main --head dev --assignee pingu2k4 --fill --label automated --label release --title "Merge v${{ steps.grv.outputs.version }}" | grep -o 'https://github.com/[^/]\+/[^/]\+/pull/\([0-9]\+\)' | awk -F '/' '{print $NF}')
+        echo PR Number: $pr_number
+        echo "prNumber=$pr_number" >> ${GITHUB_OUTPUT}
+
+    - name: Merge Pull Request
+      if: ${{ steps.cpr.outputs.prNumber }}
+      env:
+        GH_TOKEN: ${{ secrets.PAT }}
+      run: |
+        gh pr merge ${{ steps.cpr.outputs.prNumber }} --auto --merge

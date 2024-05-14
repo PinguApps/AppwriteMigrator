@@ -1,0 +1,79 @@
+name: Main
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  PROJECT_NAME: PinguApps.AppwriteMigrator
+  DOTNET_VERSION: '8.0'
+  NUGET_FEED: https://api.nuget.org/v3/index.json
+  NUGET_KEY: ${{ secrets.NUGET_KEY }}
+
+jobs:
+  build:
+    name: Build & Test
+    uses: ./.github/workflows/_build.yml
+    secrets: inherit
+
+  push-nuget:
+    needs: build
+    name: Push Nuget
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Get Release version
+      id: grv
+      run: |
+        arrTag=(${GITHUB_REF//\// })
+        VERSION="${arrTag[2]}"
+        echo Version: $VERSION
+        VERSION="${VERSION:1}"
+        echo Clean Version: $VERSION
+        echo version=$VERSION >> ${GITHUB_OUTPUT}
+
+    - name: Create Nuget Package
+      run: |
+        dotnet pack -c Release --verbosity normal --include-symbols --include-source -p:PackageVersion=${{ steps.grv.outputs.version }} -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.csproj
+
+    - name: Push to NuGet Feed
+      run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --api-key $NUGET_KEY --skip-duplicate
+
+  sync:
+    name: Sync back to dev
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+      with:
+        ref: main
+
+    - name: Create Pull Request
+      id: cpr
+      env:
+        GH_TOKEN: ${{ secrets.PAT }}
+      run: |
+        git fetch origin dev
+        pr_number=$(gh pr create --base dev --head main --assignee pingu2k4 --fill --label automated --label sync | grep -o 'https://github.com/[^/]\+/[^/]\+/pull/\([0-9]\+\)' | awk -F '/' '{print $NF}')
+        echo PR Number: $pr_number
+        echo "prNumber=$pr_number" >> ${GITHUB_OUTPUT}
+
+    - name: Merge Pull Request
+      if: ${{ steps.cpr.outputs.prNumber }}
+      env:
+        GH_TOKEN: ${{ secrets.PAT }}
+      run: |
+        gh pr merge ${{ steps.cpr.outputs.prNumber }} --auto --merge

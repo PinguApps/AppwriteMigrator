@@ -1,0 +1,264 @@
+[
+  {
+    "Collections": [
+      {
+        "Id": "663c198f0016e67cc571",
+        "CreatedAt": "09/05/2024 01:32:15",
+        "UpdatedAt": "09/05/2024 02:02:44",
+        "Permissions": [
+          "read(\u0022any\u0022)",
+          "read(\u0022guests\u0022)",
+          "create(\u0022users\u0022)",
+          "read(\u0022users\u0022)",
+          "update(\u0022label:master\u0022)",
+          "create(\u0022user:663c1f8f000ce8801211\u0022)",
+          "read(\u0022user:663c1f8f000ce8801211\u0022)",
+          "update(\u0022user:663c1f8f000ce8801211\u0022)",
+          "create(\u0022user:663c1fd7001afbbfdd1b\u0022)",
+          "read(\u0022user:663c1fd7001afbbfdd1b\u0022)",
+          "update(\u0022user:663c1fd7001afbbfdd1b\u0022)",
+          "create(\u0022team:663c200400317e846059\u0022)",
+          "read(\u0022team:663c200400317e846059\u0022)",
+          "update(\u0022team:663c200400317e846059\u0022)"
+        ],
+        "DatabaseId": "663c198200252ad35aa5",
+        "Name": "books",
+        "Enabled": true,
+        "DocumentSecurity": false,
+        "Attributes": [
+          {
+            "key": "StringAttribute",
+            "type": "string",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "size": 32,
+            "default": "default value"
+          },
+          {
+            "key": "StringArray",
+            "type": "string",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": true,
+            "size": 64,
+            "default": null
+          },
+          {
+            "key": "Integer",
+            "type": "integer",
+            "status": "available",
+            "error": "",
+            "required": true,
+            "array": false,
+            "min": -50,
+            "max": 50,
+            "default": null
+          },
+          {
+            "key": "Float",
+            "type": "double",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "min": -55.55,
+            "max": 55.55,
+            "default": 5.5
+          },
+          {
+            "key": "BooleanAttribute",
+            "type": "boolean",
+            "status": "available",
+            "error": "",
+            "required": true,
+            "array": false,
+            "default": null
+          },
+          {
+            "key": "DateTimeKey",
+            "type": "datetime",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "format": "",
+            "default": "2024-05-10T01:43:40.407"
+          },
+          {
+            "key": "EmailAttribute",
+            "type": "string",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "format": "email",
+            "default": null
+          },
+          {
+            "key": "IP",
+            "type": "string",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "format": "ip",
+            "default": null
+          },
+          {
+            "key": "URLAttribute",
+            "type": "string",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "format": "url",
+            "default": null
+          },
+          {
+            "key": "EnumAttribute",
+            "type": "string",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "elements": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "format": "enum",
+            "default": "A"
+          },
+          {
+            "key": "authors",
+            "type": "relationship",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "relatedCollection": "663d30040004985b3092",
+            "relationType": "oneToOne",
+            "twoWay": false,
+            "twoWayKey": "books",
+            "onDelete": "setNull",
+            "side": "parent"
+          },
+          {
+            "key": "authors2",
+            "type": "relationship",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "relatedCollection": "663d30040004985b3092",
+            "relationType": "oneToMany",
+            "twoWay": false,
+            "twoWayKey": "663c198f0016e67cc571",
+            "onDelete": "cascade",
+            "side": "parent"
+          },
+          {
+            "key": "authors0",
+            "type": "relationship",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "relatedCollection": "663d30040004985b3092",
+            "relationType": "manyToMany",
+            "twoWay": true,
+            "twoWayKey": "books0",
+            "onDelete": "restrict",
+            "side": "parent"
+          }
+        ],
+        "Indexes": [
+          {
+            "Key": "KeyIndex",
+            "Type": "key",
+            "Status": "available",
+            "Error": "",
+            "Attributes": [
+              "StringAttribute",
+              "Float"
+            ],
+            "Orders": [
+              "ASC",
+              "ASC"
+            ]
+          },
+          {
+            "Key": "UniqueAttribute",
+            "Type": "unique",
+            "Status": "available",
+            "Error": "",
+            "Attributes": [
+              "IP"
+            ],
+            "Orders": [
+              "ASC"
+            ]
+          },
+          {
+            "Key": "FullTextAttribute",
+            "Type": "fulltext",
+            "Status": "available",
+            "Error": "",
+            "Attributes": [
+              "StringAttribute"
+            ],
+            "Orders": [
+              "ASC"
+            ]
+          }
+        ]
+      },
+      {
+        "Id": "663d30040004985b3092",
+        "CreatedAt": "09/05/2024 21:20:20",
+        "UpdatedAt": "09/05/2024 21:20:20",
+        "Permissions": [],
+        "DatabaseId": "663c198200252ad35aa5",
+        "Name": "Authors",
+        "Enabled": true,
+        "DocumentSecurity": false,
+        "Attributes": [
+          {
+            "key": "Name",
+            "type": "string",
+            "status": "available",
+            "error": "",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          },
+          {
+            "key": "books0",
+            "type": "relationship",
+            "status": "available",
+            "error": "",
+            "required": false,
+            "array": false,
+            "relatedCollection": "663c198f0016e67cc571",
+            "relationType": "manyToMany",
+            "twoWay": true,
+            "twoWayKey": "authors0",
+            "onDelete": "restrict",
+            "side": "child"
+          }
+        ],
+        "Indexes": []
+      }
+    ],
+    "Id": "663c198200252ad35aa5",
+    "Name": "dbo",
+    "CreatedAt": "09/05/2024 01:32:02",
+    "UpdatedAt": "09/05/2024 01:32:02",
+    "Enabled": true
+  }
+]

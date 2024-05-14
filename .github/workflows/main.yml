@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  PROJECT_NAME: AppwriteMigrator
+  PROJECT_NAME: PinguApps.AppwriteMigrator
   DOTNET_VERSION: '8.0'
   NUGET_FEED: https://api.nuget.org/v3/index.json
   NUGET_KEY: ${{ secrets.NUGET_KEY }}
@@ -30,14 +30,19 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Create Nuget Package
+    - name: Get Release version
+      id: grv
       run: |
         arrTag=(${GITHUB_REF//\// })
         VERSION="${arrTag[2]}"
         echo Version: $VERSION
         VERSION="${VERSION:1}"
         echo Clean Version: $VERSION
-        dotnet pack -c Release --verbosity normal --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.csproj
+        echo version=$VERSION >> ${GITHUB_OUTPUT}
+
+    - name: Create Nuget Package
+      run: |
+        dotnet pack -c Release --verbosity normal --include-symbols --include-source -p:PackageVersion=${{ steps.grv.outputs.version }} -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.csproj
 
     - name: Push to NuGet Feed
       run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --api-key $NUGET_KEY --skip-duplicate

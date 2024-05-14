@@ -28,7 +28,7 @@ jobs:
         ref: dev
 
     - name: Get Release Version
-      id: releaseVersion
+      id: grv
       run: |
         arrTag=(${GITHUB_REF//\// })
         VERSION="${arrTag[2]}"
@@ -43,7 +43,7 @@ jobs:
         GH_TOKEN: ${{ secrets.PAT }}
       run: |
         git fetch origin main
-        pr_number=$(gh pr create --base main --head dev --assignee pingu2k4 --fill --label automated --label release --title "Merge v${{ steps.releaseVersion.outputs.version }}" | grep -o 'https://github.com/[^/]\+/[^/]\+/pull/\([0-9]\+\)' | awk -F '/' '{print $NF}')
+        pr_number=$(gh pr create --base main --head dev --assignee pingu2k4 --fill --label automated --label release --title "Merge v${{ steps.grv.outputs.version }}" | grep -o 'https://github.com/[^/]\+/[^/]\+/pull/\([0-9]\+\)' | awk -F '/' '{print $NF}')
         echo PR Number: $pr_number
         echo "prNumber=$pr_number" >> ${GITHUB_OUTPUT}
 

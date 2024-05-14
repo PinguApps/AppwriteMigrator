@@ -4,7 +4,6 @@ on:
   workflow_call:
 
 env:
-  PROJECT_NAME: AppwriteMigrator
   DOTNET_VERSION: '8.0'
 
 jobs:

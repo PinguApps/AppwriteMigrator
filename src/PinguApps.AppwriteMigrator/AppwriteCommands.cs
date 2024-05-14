@@ -63,7 +63,7 @@ public class AppwriteCommands
     public async Task Migrate([Option('e', Description = "The API endpoint")] string endpoint,
         [Option("id", ['i'], Description = "the Project ID for the target project")] string projectId,
         [Option("key", ['k'], Description = "The API Key for the project")] string apiKey,
-        [Option('f', Description = "The filename to store the schema within")] string fileName = "appwrite-schema.json")
+        [Option('f', Description = "The filename containing the schema definition")] string fileName = "appwrite-schema.json")
     {
         Console.WriteLine("# Begin Migration...");
 

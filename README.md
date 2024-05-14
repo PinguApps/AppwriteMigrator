@@ -8,7 +8,7 @@ PinguApps.AppwriteMigrator is a .NET CLI tool that enables a code-first approach
 Install the PinguApps.AppwriteMigrator package via NuGet:
 
 ```sh
-dotnet tool install -g PinguApps.AppwriteMigrator
+dotnet tool install -g PinguApps.AppwriteMigrator --prerelease
 ```
 
 # 🚀 Usage

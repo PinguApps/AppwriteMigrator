@@ -40,13 +40,16 @@ jobs:
         PR_NUMBER=$(gh pr list --base main --state merged --limit 1 --json number --jq '.[0].number')
         echo "PR Number: ${PR_NUMBER}"
         PR_TITLE=$(gh pr view $PR_NUMBER --json title --jq '.title')
+        echo "PR Title: ${PR_TITLE}"
         echo "PR_TITLE=${PR_TITLE}" >> $GITHUB_ENV
 
     - name: Extract version from PR title
       id: extract-version
       run: |
         VERSION=$(echo "${PR_TITLE}" | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?')
+        echo "Version: ${VERSION}"
         VERSION_WITHOUT_V=${VERSION#v}
+        echo "Version -v: ${VERSION_WITHOUGH_V}"
         echo "VERSION=${VERSION_WITHOUT_V}" >> $GITHUB_ENV
 
     - name: Create Nuget Package

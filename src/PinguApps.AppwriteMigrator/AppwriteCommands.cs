@@ -1,5 +1,6 @@
 ﻿using Appwrite;
 using Appwrite.Enums;
+using Appwrite.Models;
 using Appwrite.Services;
 using Cocona;
 using PinguApps.AppwriteMigrator.Converters;
@@ -35,26 +36,54 @@ public class AppwriteCommands
 
         var dbClient = new Databases(client);
 
-        var databases = await dbClient.List();
+        List<Database> databases = [];
 
-        Console.WriteLine($"Found {databases.Databases.Count} database(s)...");
+        while (true)
+        {
+            var queries = databases.Count > 0 ? new List<string> { Query.CursorAfter(databases[databases.Count - 1].Id) } : null;
+
+            var dbList = await dbClient.List(queries);
+
+            databases.AddRange(dbList.Databases);
+
+            if (dbList.Total <= databases.Count)
+            {
+                break;
+            }
+        }
+
+        Console.WriteLine($"Found {databases.Count} database(s)...");
 
         List<DatabaseExtended> schema = [];
 
-        foreach (var database in databases.Databases)
+        foreach (var database in databases)
         {
-            var collections = await dbClient.ListCollections(database.Id);
+            List<Collection> collections = [];
 
-            Console.WriteLine($"Database '{database.Name}' contains {collections.Collections.Count} collections...");
+            while (true)
+            {
+                var queries = collections.Count > 0 ? new List<string> { Query.CursorAfter(collections[collections.Count - 1].Id) } : null;
 
-            var extendedDatabase = new DatabaseExtended(database, collections.Collections);
+                var collectionList = await dbClient.ListCollections(database.Id, queries);
+
+                collections.AddRange(collectionList.Collections);
+
+                if (collectionList.Total <= collections.Count)
+                {
+                    break;
+                }
+            }
+
+            Console.WriteLine($"Database '{database.Name}' contains {collections.Count} collections...");
+
+            var extendedDatabase = new DatabaseExtended(database, collections);
 
             schema.Add(extendedDatabase);
         }
 
         var json = JsonSerializer.Serialize(schema, _jsonSerializerOptions);
 
-        await File.WriteAllTextAsync(fileName, json);
+        await System.IO.File.WriteAllTextAsync(fileName, json);
 
         Console.WriteLine("# Sync Complete!");
     }
@@ -74,7 +103,7 @@ public class AppwriteCommands
 
         var dbClient = new Databases(client);
 
-        var json = await File.ReadAllTextAsync(fileName);
+        var json = await System.IO.File.ReadAllTextAsync(fileName);
 
         var newSchema = JsonSerializer.Deserialize<List<DatabaseExtended>>(json, _jsonSerializerOptions);
 
